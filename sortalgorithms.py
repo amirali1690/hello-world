@@ -1,6 +1,5 @@
 def mergesort(list0):
     n=len(list0)
-    print(n)
     if n>2:
         mid= n//2
         a=list0[:mid]
@@ -8,23 +7,25 @@ def mergesort(list0):
         asort=mergesort(a)
         bsort=mergesort(b)
         k=0
+        i=0
+        j=0
         sort=[]
-        while k<n:
-            if asort and bsort:
-                if asort[0]<bsort[0]:
-                    sort.append(asort[0])
-                    asort.pop(0)
-                else:
-                    sort.append(bsort[0])
-                    bsort.pop(0)
-            elif not asort and bsort:
-                sort.append(bsort[0])
-                bsort.pop(0)
-            elif not bsort and asort:
-                sort.append(asort[0])
-                asort.pop(0)
+        while i<len(asort) and j<len(bsort):
+            if asort[i]<bsort[j]:
+                sort.append(asort[i])
+                i+=1
             else:
-                break
+                sort.append(bsort[j])
+                j+=1
+            k+=1
+        while i<len(asort):
+            sort.append(asort[i])
+            i+=1
+            k+=1
+        while j<len(bsort):
+            sort.append(bsort[j])
+            j+=1
+            k+=1
         return sort
     if n==1:
         return list0
@@ -35,3 +36,5 @@ def mergesort(list0):
             return [a,b]
         else:
             return [b,a]
+
+
