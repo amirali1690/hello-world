@@ -1,40 +1,62 @@
 def mergesort(list0):
     n=len(list0)
-    if n>2:
+    if n>=2:
         mid= n//2
-        a=list0[:mid]
-        b=list0[mid:]
-        asort=mergesort(a)
-        bsort=mergesort(b)
+        l=list0[:mid]
+        r=list0[mid:]
+        mergesort(l)
+        mergesort(r)
         k=0
         i=0
         j=0
-        sort=[]
-        while i<len(asort) and j<len(bsort):
-            if asort[i]<bsort[j]:
-                sort.append(asort[i])
+        while i<len(l) and j<len(r):
+            if l[i]<r[j]:
+                list0[k]=l[i]
                 i+=1
             else:
-                sort.append(bsort[j])
+                list0[k]=r[j]
                 j+=1
             k+=1
-        while i<len(asort):
-            sort.append(asort[i])
+        while i<len(l):
+            list0[k]=l[i]
             i+=1
             k+=1
-        while j<len(bsort):
-            sort.append(bsort[j])
+        while j<len(r):
+            list0[k]=r[j]
             j+=1
             k+=1
-        return sort
-    if n==1:
-        return list0
-    else:
-        a=list0[0]
-        b=list0[1]
-        if a<b:
-            return [a,b]
-        else:
-            return [b,a]
 
 
+
+def merge_sort(array):
+    if (len(array)>=2):
+        iM = len(array)//2
+        
+        left = array[:iM].copy()
+        right = array[iM:].copy()
+        
+        merge_sort(left)
+        merge_sort(right)
+        
+        iA = 0
+        iB = 0
+        iC = 0
+        
+        while(iA<len(left) and iB<len(right)):
+            if left[iA]<right[iB]:
+                array[iC]=left[iA]
+                iA+=1
+            else:
+                array[iC]=right[iB]
+                iB+=1
+            iC+=1
+            
+        while(iA<len(left)):
+            array[iC]=left[iA]
+            iA+=1
+            iC+=1
+            
+        while(iB<len(right)):
+            array[iC]=right[iB]
+            iB+=1
+            iC+=1
