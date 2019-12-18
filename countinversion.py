@@ -15,9 +15,9 @@ def countinv(list0):
         r=list0[mid:]
         r0=list0[mid:]
         invl=countinv(l)
-        print(l,invl)
+        #print(l,invl)
         invr=countinv(r)
-        print(r,invr)
+        #print(r,invr)
         k=0
         i=0
         j=0
@@ -34,7 +34,6 @@ def countinv(list0):
                 list0[k]=r[j]
                 j+=1
                 inv=inv+len(l)-i
-                
             k+=1
         while i<len(l):
             list0[k]=l[i]
@@ -44,8 +43,8 @@ def countinv(list0):
             list0[k]=r[j]
             j+=1
             k+=1
-            inv=inv+len(l)-i
         return int(inv)
     elif len(list0)<2:
         inv=0
         return int(inv)
+
