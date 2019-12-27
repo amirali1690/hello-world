@@ -22,26 +22,26 @@ def Partition(array,pivot):
 
 def QuickSort(array,m):
     if len(array)==1:
-        m=m+1
         print('case 1',array,m)
         return array,m
     elif len(array)==0:
-        m=m+1
         return array,m
     elif len(array)==2:
         if array[0]>array[1]:
             temp=array[0]
             array[0]=array[1]
             array[1]=temp
-            m=m+1
         m=m+1
         print('case2',array,m)
         return array,m
     else:
         pivot=array[0]
         array=array[1:]
+        if len(array)==1:
+            if pivot>array[0]:
+                m=m+1
         n=len(array)
-        i,n=Partition(array,pivot)
+        i=Partition(array,pivot)
         left=array[:i]
         right=array[i:]
         left1,ml=QuickSort(left,m)
@@ -50,4 +50,17 @@ def QuickSort(array,m):
         print('casen',left,ml,right,mr,m)
         array=left1+[pivot]+right1
         return array,m
-        
+    
+def QuickSort2(array,m):
+    if len(array)<2:
+        return array,m
+    else:
+        pivot=array[0]
+        array=array[1:]
+        i=Partition(array,pivot)
+        left,ml=QuickSort2(array[:i],m)
+        right,mr=QuickSort2(array[i:],m)
+        m=m+ml+mr+len(array)
+        print(type(left),type(right))
+        array=left+[pivot]+right
+        return array,m
