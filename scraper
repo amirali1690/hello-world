@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec 30 14:04:44 2019
+
+@author: amir
+"""
+import requests
+from bs4 import BeautifulSoup
+
+session = requests.Session()
+session.headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"}
+url='https://www.theonion.com/'
+content = session.get(url, verify=False).content
+
+soup = BeautifulSoup(content,"html.parser")
+posts = soup.find_all('div',{'class':'curation-module__item'})
+
+for post in posts:
+    first=post.find_all('div',{'class':'content-wrapper'})[0]
+    link=first.find('a')['href']
+    title = first.find('a').text
+    second=post.find_all('div',{'class':'image-container'})[0]
+    image_source=second.find('img')['srcset']
+    image_source=image_source[:image_source.find('.jpg')+4]
+    print(title)
+    print(image_source)
