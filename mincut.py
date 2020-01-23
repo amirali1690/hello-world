@@ -1,54 +1,66 @@
-import re
 import random
+import copy
 
-# Load the file into a graph represented by a dict of lists
-def load_graph():
-    g = {}
+with open('edge.txt') as f:
+    #kargerMinCut
+    #a = [[int(x) for x in ln.split()] for ln in f]
+    data_set = []
+    for ln in f:
+        line = ln.split()
+        if line:
+            a = [int(x) for x in line]
+            data_set.append(a)
 
-    f = open('edge.txt')
-    lines = f.readlines()
-    f.close()
+def choose_random_edge(data):
+    a = random.randint(0,len(data)-1)
+    b = random.randint(1,len(data[a])-1)
+    return a,b
 
-    lines = map(lambda s: re.sub('\s+',' ',str(s.strip('\r\n'))).strip(),lines)
-    lines = map(lambda s: s.split(' '),lines)
+def compute_nodes(data):
+    data_head = []
+    for i in range(len(data)):
+        data_head.append(data[i][0])
+    return data_head
 
-    for line in lines:
-        g[int(line[0])] = map(lambda s: int(s),line[1:])
+def find_index(data_head,data,u,v):
+    index = data_head.index(data[u][v])
+    return index
 
-    return g
+def replace(data_head,data,index,u):
+    for i in data[index][1:]:
+        index_index = data_head.index(i)
+        for position,value in enumerate(data[index_index]):
+            if value == data[index][0]:
+                data[index_index][position] = data[u][0]
+    return data
+    
+def merge(data):
+    u,v = choose_random_edge(data)
+    #print u,v
+    data_head = compute_nodes(data)
+    index = find_index(data_head,data,u,v)
+    data[u].extend(data[index][1:])
+    #print data
+    data = replace(data_head,data,index,u)
+    #print data
+    data[u][1:] = [x for x in data[u][1:] if x!=data[u][0]]
+    #print data
+    data.remove(data[index])
+    #print data
+    return data
 
-# Contract an edge between 2 vertices
-def contract_edge(edge):
-    global g 
+def KargerMinCut(data):
+    
+    data = copy.deepcopy(data)
+    while len(data) >2:
+        data = merge(data)
+        #print data
+    num = len(data[0][1:])
+    return num
 
-    # merge v2 into v1 and remove v2 from graph
-    v1l = g[edge[0]]
-    v1l.extend(g[edge[1]])
-    del g[edge[1]]
-
-    #replace all occurnces of v2 value with v1
-    for k, l in g.iteritems():
-        g[k] = [edge[0] if x == edge[1] else x for x in g[k]]
-
-    # Remove all edges of v1 to itself(loops)
-    g[edge[0]] = [x for x in g[edge[0]] if x != edge[0]]
-
-# Gets a random edge available in the current graph
-def get_random_edge():
-    v1 = list(g.keys())[random.randint(0,len(g)-1)]
-    v2 = list(g[v1]) [random.randint(0,len(list(g[v1]))-1)]
-    return (v1,v2)
-
-minlist = []
-
-# Repeat 10 times to get a minimum
-for i in range(0,20):
-    g = load_graph()
-
-    # Keep contracting the graph until we have 2 vertices
-    while(len(g) > 2):
-        contract_edge(get_random_edge())
-
-    minlist.append(len(g[g.keys()[0]]))
-
-print (min(minlist))
+#KargerMinCut(data_set)
+def calc_number(data,iteration):
+    list = []
+    for i in range(iteration):
+        list.append(KargerMinCut(data))
+    return min(list)
